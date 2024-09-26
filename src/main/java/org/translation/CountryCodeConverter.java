@@ -4,22 +4,22 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-// TODO CheckStyle: Wrong lexicographical order for 'java.util.HashMap' import (remove this comment once resolved)
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * This class provides the service of converting country codes to their names.
  */
 public class CountryCodeConverter {
-
     // TODO Task: pick appropriate instance variable(s) to store the data necessary for this class
-
+    private Map<String, String> map1 = new HashMap<>();
+    private Map<String, String> map2 = new HashMap<>();
     /**
      * Default constructor which will load the country codes from "country-codes.txt"
      * in the resources folder.
      */
+
     public CountryCodeConverter() {
         this("country-codes.txt");
     }
@@ -34,6 +34,16 @@ public class CountryCodeConverter {
         try {
             List<String> lines = Files.readAllLines(Paths.get(getClass()
                     .getClassLoader().getResource(filename).toURI()));
+            while (lines.iterator().hasNext()) {
+                String line = lines.iterator().next();
+                String[] parts = line.split(" ");
+                String country = "";
+                String threecode = "";
+                country = parts[0];
+                threecode = parts[2];
+                map1.put(country, threecode);
+                map2.put(threecode, country);
+            }
 
             // TODO Task: use lines to populate the instance variable(s)
 
@@ -51,7 +61,8 @@ public class CountryCodeConverter {
      */
     public String fromCountryCode(String code) {
         // TODO Task: update this code to use an instance variable to return the correct value
-        return code;
+        String country = map2.get(code);
+        return country;
     }
 
     /**
@@ -61,7 +72,8 @@ public class CountryCodeConverter {
      */
     public String fromCountry(String country) {
         // TODO Task: update this code to use an instance variable to return the correct value
-        return country;
+        String code = map1.get(country);
+        return code;
     }
 
     /**
